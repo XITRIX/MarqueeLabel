@@ -1139,7 +1139,11 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
             // No mask exists, create new mask
             gradientMask = CAGradientLayer()
             gradientMask.shouldRasterize = true
+            #if !os(xrOS)
             gradientMask.rasterizationScale = UIScreen.main.scale
+            #else
+            gradientMask.rasterizationScale = UITraitCollection.current.displayScale
+            #endif
             gradientMask.startPoint = CGPoint(x:0.0, y:0.5)
             gradientMask.endPoint = CGPoint(x:1.0, y:0.5)
         }
@@ -1530,7 +1534,7 @@ open class MarqueeLabel: UILabel, CAAnimationDelegate {
     // MARK: - Modified UILabel Functions/Getters/Setters
     //
     
-    #if os(iOS)
+    #if os(iOS) && !os(xrOS)
     override open func forBaselineLayout() -> UIView {
         // Use subLabel view for handling baseline layouts
         return sublabel
